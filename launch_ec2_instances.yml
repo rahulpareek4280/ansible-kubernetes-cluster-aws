@@ -2,27 +2,28 @@
   hosts: localhost
   become: false
   vars:
-    keypair: aws-arth-key 
+    keypair: ansible 
     instance_type: t2.medium
-    image: ami-00bf4ae5a7909786c
-    vpc_subnet_id: subnet-0f20d73e825bd2692
-    security_group_id: sg-0344355829b3965a2
-    region: ap-south-1
-    output_dir: /home/devops/ansible-kubernetes-cluster-aws 
+    image: ami-0aa7d40eeae50c9a9
+    vpc_subnet_id: subnet-033ff8c84d80fdab0
+    security_group_id: sg-0e16c7204116ea67e
+    region: us-east-1
+    output_dir: /Users/shop/Documents/assessment/ansible-kubernetes-cluster-aws
 
   tasks:
     - name: launch ec2 instance
-      amazon.aws.ec2:
-        keypair: "{{ keypair }}"
-        group_id: "{{ security_group_id }}"
+      amazon.aws.ec2_instance:
+        key_name: "{{ keypair }}"
+        security_group: "{{ security_group_id }}"
         instance_type: "{{ instance_type }}"
         vpc_subnet_id: "{{ vpc_subnet_id }}"
-        image: "{{ image }}"
-        assign_public_ip: yes
+        image_id: "{{ image }}"
+        network:
+          assign_public_ip: true
         wait: yes
         wait_timeout: 500
         count: 1
-        instance_tags:
+        tags:
           name: master
           env: test
         region: "{{ region }}"
@@ -38,27 +39,28 @@
   hosts: localhost
   become: false
   vars:
-    keypair: aws-arth-key 
+    keypair: ansible
     instance_type: t2.micro
-    image: ami-00bf4ae5a7909786c
-    vpc_subnet_id: subnet-0f20d73e825bd2692
-    security_group_id: sg-0344355829b3965a2
-    region: ap-south-1
-    output_dir: /home/devops/ansible-kubernetes-cluster-aws
+    image: ami-0aa7d40eeae50c9a9
+    vpc_subnet_id: subnet-033ff8c84d80fdab0
+    security_group_id: sg-0e16c7204116ea67e
+    region: us-east-1
+    output_dir: /Users/shop/Documents/assessment/ansible-kubernetes-cluster-aws
 
   tasks:
     - name: launch ec2 instance
-      amazon.aws.ec2:
-        keypair: "{{ keypair }}"
-        group_id: "{{ security_group_id }}"
+      amazon.aws.ec2_instance:
+        key_name: "{{ keypair }}"
+        security_group: "{{ security_group_id }}"
         instance_type: "{{ instance_type }}"
         vpc_subnet_id: "{{ vpc_subnet_id }}"
-        image: "{{ image }}"
-        assign_public_ip: yes
+        image_id: "{{ image }}"
+        network:
+          assign_public_ip: true
         wait: yes
         wait_timeout: 500
         count: 3
-        instance_tags:
+        tags:
           name: worker
           env: test
         region: "{{ region }}"
